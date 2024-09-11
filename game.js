@@ -21,9 +21,42 @@ function getHumanChoice() {
 let humanScore = 0;
 let computerScore = 0;
 const resultRef = document.querySelector('.results');
+const currentResultRef = document.querySelector('.current-result');
+
+
+
+function updateResult() {
+
+    function clearScore() {
+        const refs = resultRef.querySelectorAll('p')
+        refs.forEach(child => resultRef.removeChild(child))
+    }
+    
+    const rounds = 5;
+    const humanResult = document.createElement("p");
+    const computerResult = document.createElement("p");
+    humanResult.textContent = `Human: ${humanScore}`
+    computerResult.textContent = `Computer: ${computerScore}`
+
+    clearScore();
+    resultRef.appendChild(humanResult);
+    resultRef.appendChild(computerResult);
+
+    if(humanScore === rounds || computerScore === rounds) {
+        const winner = document.createElement("p");
+        winner.textContent = `Winner: ${humanScore > computerScore ? 'Human' : 'Computer'}`
+        resultRef.appendChild(winner);
+        endGame();
+    }
+}
+
+function endGame() {
+    const btnContainerRef = document.querySelector('.btn-container');
+    const buttons = btnContainerRef.querySelectorAll('button');
+    buttons.forEach(btn => btn.disabled = true)
+}
 
 function playRound (humanChoice, computerChoice) {
-    
     
     let computerWin = false;
     let userWin = false;
@@ -48,19 +81,18 @@ function playRound (humanChoice, computerChoice) {
     }
 
 
-
     if (computerWin) {
-        resultRef.textContent = `You lose! "${computerChoice}" beats "${humanChoice}"`;
+        currentResultRef.textContent = `You lose! "${computerChoice}" beats "${humanChoice}"`;
         computerScore++;
     }
     else if (userWin) {
-        resultRef.textContent = `You win! "${humanChoice}" beats "${computerChoice}"`;
+        currentResultRef.textContent = `You win! "${humanChoice}" beats "${computerChoice}"`;
         humanScore++;
     }
     else {
-        resultRef.textContent = `Tie! Both chose "${humanChoice}"`;
+        currentResultRef.textContent = `Tie! Both chose "${humanChoice}"`;
     }
-    
+    updateResult();
 }
     
     const btnContainerRef = document.querySelector('.btn-container');
